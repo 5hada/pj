@@ -80,4 +80,11 @@ public class PlayerHP : MonoBehaviour
         }
     }    
 
+    public void Heal()
+    {
+        if (currentHP < maxHP)
+        {
+            currentHP += 1;
+        }
+    }
 }

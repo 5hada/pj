@@ -36,6 +36,6 @@ public class ItemSpawner : MonoBehaviour
     {
         float x = positionIndex % 4;
         float y = positionIndex / 4;
-        return new Vector2(x, y);
+        return new Vector2(x,-y);
     }
 }
