@@ -10,6 +10,8 @@ public class Movement : MonoBehaviour
     private string currentScene;
     public int currentPositionIndex;
 
+    private Animator animator;
+
 
 
     private void Awake()
@@ -17,6 +19,7 @@ public class Movement : MonoBehaviour
         transform.position = new Vector2(0, 0);
         currentPosition = (0, 0);
         currentPositionIndex = 0;
+        animator = GetComponent<Animator>();
     }
 
     private void Start()
@@ -69,35 +72,55 @@ public class Movement : MonoBehaviour
 
     void GridMove(Vector3 input, float horizontal, float vertical, int gridSize, bool shift)
     {
-        int index = currentPositionIndex;
-        int totalCells = gridSize * gridSize;
-
-        int row = index / gridSize;
-        int col = index % gridSize;
-
+        int prevIndex = currentPositionIndex;
         int moveAmount = shift ? 2 : 1;
+        int maxIndex = gridSize * gridSize;
 
-        // 가로 이동
+        int prevRow = currentPositionIndex / gridSize;
+        int prevCol = currentPositionIndex % gridSize;
+
+        int row = prevRow;
+        int col = prevCol;
+
         if (horizontal > 0)
             col = (col + moveAmount) % gridSize;
         else if (horizontal < 0)
             col = (col - moveAmount + gridSize) % gridSize;
 
-        // 세로 이동
         if (vertical > 0)
-            row = (row - moveAmount + gridSize) % gridSize; // 위로 이동 → row 감소
+            row = (row - moveAmount + gridSize) % gridSize;
         else if (vertical < 0)
-            row = (row + moveAmount) % gridSize; // 아래로 이동 → row 증가
+            row = (row + moveAmount) % gridSize;
 
         currentPositionIndex = row * gridSize + col;
 
-
         if (input != Vector3.zero)
         {
-            Vector3 targetPosition = IndexToPosition(currentPositionIndex, gridSize);
-            StartCoroutine(MoveToPosition(targetPosition));
+            Vector3 targetPos = IndexToPosition(currentPositionIndex, gridSize);
+
+            MoveType moveType;
+
+            int dist = Mathf.Abs(currentPositionIndex - prevIndex);
+
+            if (dist == 1 || dist == gridSize)
+            {
+                moveType = MoveType.Normal1;
+            }
+            else if (dist == 2 || dist == gridSize * 2)
+            {
+                moveType = MoveType.Double;
+            }
+            else
+            {
+                moveType = MoveType.Wrapped;
+            }
+
+            PlayMoveAnimation(moveType);
+
+            StartCoroutine(MoveToPosition(targetPos));
         }
     }
+
 
     public Vector3 IndexToPosition(int index, int gridSize)
     {
@@ -112,5 +135,27 @@ public class Movement : MonoBehaviour
 
         return new Vector3(worldX, worldY, 0f);
     }
+    void PlayMoveAnimation(MoveType type)
+    {
+        switch (type)
+        {
+            case MoveType.Normal1:
+                animator.SetTrigger("Move1");
+                break;
+            case MoveType.Double:
+                animator.SetTrigger("Move2");
+                break;
+            case MoveType.Wrapped:
+                animator.SetTrigger("Warp");
+                break;
+        }
+    }
 
+}
+
+enum MoveType
+{
+    Normal1,     // 일반 이동 (1칸)
+    Double,      // 두 칸 이동 (Shift)
+    Wrapped      // 벽을 넘어 반대편으로 이동
 }

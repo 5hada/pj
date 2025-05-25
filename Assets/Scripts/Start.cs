@@ -10,5 +10,10 @@ public class Start : MonoBehaviour
         {
             SceneController.Instance.LoadScene("LevelSelect");
         }
+
+        if ( InputManager.Instance.IsExitPressed())
+        {
+            Application.Quit();
+        }
     }
 }
