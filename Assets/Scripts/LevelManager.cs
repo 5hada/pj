@@ -34,31 +34,31 @@ public class LevelManager : MonoBehaviour
             switch (selectedLevel)
             {
                 case 1:
-                    UnityEngine.SceneManagement.SceneManager.LoadScene("Level01");
+                    SceneController.Instance.LoadScene("Level01");
                     break;
                 case 2:
-                    UnityEngine.SceneManagement.SceneManager.LoadScene("Level02");
+                    SceneController.Instance.LoadScene("Level02");
                     break;
                 case 3:
-                    UnityEngine.SceneManagement.SceneManager.LoadScene("Level03");
+                    SceneController.Instance.LoadScene("Level03");
                     break;
                 case 4:
-                    UnityEngine.SceneManagement.SceneManager.LoadScene("Level04");
+                    SceneController.Instance.LoadScene("Level04");
                     break;
                 case 5:
-                    UnityEngine.SceneManagement.SceneManager.LoadScene("Level05");
+                    SceneController.Instance.LoadScene("Level05");
                     break;
                 case 6:
-                    UnityEngine.SceneManagement.SceneManager.LoadScene("Level06");
+                    SceneController.Instance.LoadScene("Level06");
                     break;
                 case 7:
-                    UnityEngine.SceneManagement.SceneManager.LoadScene("Level07");
+                    SceneController.Instance.LoadScene("Level07");
                     break;
                 case 8:
-                    UnityEngine.SceneManagement.SceneManager.LoadScene("Setting");
+                    SceneController.Instance.LoadScene("Setting");
                     break;
                 case 9:
-                    UnityEngine.SceneManagement.SceneManager.LoadScene("Main");
+                    SceneController.Instance.LoadScene("Main");
                     break;
             }
         }
