@@ -5,7 +5,7 @@ public class Movement : MonoBehaviour
 {
     public int gridSize = 3; 
     public float moveSpeed = 20.0f;
-    private bool isMoving = false;
+    public static bool isMoving = false;
     public (int x, int y) currentPosition = (0, 0);
     private string currentScene;
     public int currentPositionIndex;
@@ -16,15 +16,17 @@ public class Movement : MonoBehaviour
 
     private void Awake()
     {
-        transform.position = new Vector2(0, 0);
-        currentPosition = (0, 0);
-        currentPositionIndex = 0;
+        Time.timeScale = 1f;
         animator = GetComponent<Animator>();
     }
 
     private void Start()
     {
+        transform.position = new Vector2(0, 0);
+        currentPosition = (0, 0);
+        currentPositionIndex = 0;
         currentScene = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
+        isMoving = false;
     }
 
 
@@ -50,6 +52,7 @@ public class Movement : MonoBehaviour
                     break;
             }
         }
+
     }
 
     IEnumerator MoveToPosition(Vector3 target)
@@ -74,7 +77,7 @@ public class Movement : MonoBehaviour
     {
         int prevIndex = currentPositionIndex;
         int moveAmount = shift ? 2 : 1;
-        int maxIndex = gridSize * gridSize;
+        int maxIndex = gridSize * gridSize - 1;
 
         int prevRow = currentPositionIndex / gridSize;
         int prevCol = currentPositionIndex % gridSize;
@@ -83,14 +86,30 @@ public class Movement : MonoBehaviour
         int col = prevCol;
 
         if (horizontal > 0)
-            col = (col + moveAmount) % gridSize;
+            if (col == gridSize - 1)
+                col = 0;
+            else if (col == gridSize - 2)
+                col = gridSize - 1;
+            else col = col + moveAmount;
         else if (horizontal < 0)
-            col = (col - moveAmount + gridSize) % gridSize;
+            if (col == 0)
+                col = gridSize - 1;
+            else if (col == 1)
+                col = 0;
+            else col = col - moveAmount;
 
         if (vertical > 0)
-            row = (row - moveAmount + gridSize) % gridSize;
+            if (row == 0)
+                row = gridSize - 1;
+            else if (row == 1)
+                row = 0;
+            else row = row - moveAmount;
         else if (vertical < 0)
-            row = (row + moveAmount) % gridSize;
+            if (row == gridSize - 1)
+                row = 0;
+            else if (row == gridSize - 2)
+                row = gridSize - 1;
+            else row = row + moveAmount;
 
         currentPositionIndex = row * gridSize + col;
 

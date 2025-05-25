@@ -31,7 +31,7 @@ public class InputManager : MonoBehaviour
     }
     public bool IsShiftPressed()
     {
-        return Input.GetKeyDown(KeyCode.LeftShift);
+        return Input.GetKey(KeyCode.LeftShift);
     }
     public bool IsSpacePressed()
     {

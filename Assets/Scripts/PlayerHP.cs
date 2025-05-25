@@ -3,9 +3,12 @@ using UnityEngine;
 public class PlayerHP : MonoBehaviour
 {
     int maxHP = 3;
-    [SerializeField]
     int currentHP;
+
     SpriteRenderer spriteRenderer;
+
+    [SerializeField]
+    GameOverManager gameOverManager;
 
     private void Awake()
     {
@@ -15,12 +18,17 @@ public class PlayerHP : MonoBehaviour
     private void Update()
     {
         HpColor();
+        if (currentHP <= 0)
+        {
+            gameOverManager.ShowGameOver();
+        }
     }
+
     void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Enemy"))
         {
-            currentHP -= 1;
+            if (!Movement.isMoving) currentHP -= 1;
         }
     }
 
@@ -42,11 +50,4 @@ public class PlayerHP : MonoBehaviour
         }
     }    
 
-    void Failed()
-    {
-        if (currentHP <= 0)
-        {
-            SceneController.Instance.LoadScene("GameOver");
-        }
-    }
 }
