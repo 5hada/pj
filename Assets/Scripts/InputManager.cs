@@ -19,11 +19,15 @@ public class InputManager : MonoBehaviour
 
     public float GetHorizontal()
     {
-        return Input.GetAxisRaw("Horizontal");
+        if (Input.GetKeyDown(KeyCode.D)) return 1f;
+        else if (Input.GetKeyDown(KeyCode.A)) return -1f;
+        return 0f;
     }
     public float GetVertical()
     {
-        return Input.GetAxisRaw("Vertical");
+        if (Input.GetKeyDown(KeyCode.W)) return 1f;
+        else if (Input.GetKeyDown(KeyCode.S)) return -1f;
+        return 0f;
     }
     public bool IsShiftPressed()
     {
