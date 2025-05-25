@@ -1,9 +1,13 @@
 using UnityEngine;
+using System.Collections;
 
 public class PlayerHP : MonoBehaviour
 {
     int maxHP = 3;
     int currentHP;
+    public float invincibleTime = 1.5f; // 무적 지속 시간 (초)
+    bool isInvincible = false; // 플레이어가 무적 상태인지 여부
+    public float blinkInterval = 0.1f;
 
     SpriteRenderer spriteRenderer;
 
@@ -13,6 +17,7 @@ public class PlayerHP : MonoBehaviour
     private void Awake()
     {
         currentHP = maxHP;
+        spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
     private void Update()
@@ -24,18 +29,43 @@ public class PlayerHP : MonoBehaviour
         }
     }
 
-    void OnCollisionEnter2D(Collision2D collision)
+    void OnTriggerStay2D(Collider2D other)
     {
-        if (collision.gameObject.CompareTag("Enemy"))
+        if (other.CompareTag("Enemy"))
         {
-            if (!Movement.isMoving) currentHP -= 1;
+            if (!isInvincible && !Movement.isMoving)
+            {
+                TakeDamage();
+            }
         }
     }
 
+    void TakeDamage()
+    {
+        currentHP -= 1;
+        StartCoroutine(InvincibleCoroutine());
+    }
+
+    IEnumerator InvincibleCoroutine()
+    {
+        isInvincible = true;
+        float elapsed = 0f;
+
+        while (elapsed < invincibleTime)
+        {
+            spriteRenderer.enabled = false;
+            yield return new WaitForSeconds(blinkInterval);
+            spriteRenderer.enabled = true;
+            yield return new WaitForSeconds(blinkInterval);
+            elapsed += blinkInterval * 2;
+        }
+
+        isInvincible = false;
+        spriteRenderer.enabled = true;
+    }
 
     void HpColor()
     {
-        spriteRenderer = GetComponent<SpriteRenderer>();
         if (currentHP == 3)
         {
             spriteRenderer.color = new Color32(224,141,45,255);
