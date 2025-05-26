@@ -42,7 +42,6 @@ public class GameOverManager : MonoBehaviour
     public void QuitGame()
     {
         Time.timeScale = 1f;
-        SceneManager.LoadScene("MainMenu"); // ¶Ç´Â Application.Quit();
-        Cursor.visible = false;
+        Application.Quit();
     }
 }

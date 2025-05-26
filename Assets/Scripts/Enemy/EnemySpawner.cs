@@ -8,6 +8,8 @@ public class EnemySpawner : MonoBehaviour
 
     [SerializeField]
     private StageTimer stageTimer;
+    [SerializeField]
+    LaserManager laserManager;
 
     private Camera cam;
     private float timer;
@@ -31,11 +33,18 @@ public class EnemySpawner : MonoBehaviour
         }
         else if (remainTime > 30f)
         {
+            EnemySpawnTimer(0.5f);
+            laserManager.LaserAttackTimer(2f);
+        }
+        else if (remainTime > 15f)
+        {
             EnemySpawnTimer(1f);
+            laserManager.LaserAttackTimer(1.5f);
         }
         else if (remainTime <= 15f)
         {
             EnemySpawnTimer(1.5f);
+            laserManager.LaserAttackTimer(1f);
         }
     }
 
